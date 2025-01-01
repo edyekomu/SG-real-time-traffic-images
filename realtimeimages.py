@@ -11,18 +11,23 @@ def query_api(image_no):
     data = response.json()
 
     image_url = data["items"][0]["cameras"][image_no]["image"]
-    return image_url
+    coordinates = data["items"][0]["cameras"][image_no]["location"] # coordinates stored as dictionary
+    return image_url, coordinates # return as tuple
 
 def update_image(window, image_label, image_no):
     # fetch URL and extract image data in byte format
-    image_url = query_api(image_no)
+    image_url, image_coordinates = query_api(image_no)
     response = requests.get(image_url)
-    image_data = Image.open(BytesIO(response.content)).resize((400, 300), Image.Resampling.LANCZOS)
+    image_data = Image.open(BytesIO(response.content)).resize((400, 300), Image.Resampling.LANCZOS) # resize image to standard size
     
     # update image on window
     image_tk = ImageTk.PhotoImage(image_data)
     image_label.config(image=image_tk)
     image_label.image = image_tk
+
+    # update coordinates
+    coordinate_string = f'Latitude: {image_coordinates["latitude"]}, Longitude: {image_coordinates["longitude"]}'
+    coordinate_text.config(text=coordinate_string)
 
     # recommended to call API endpoint every minute
     # update image after time
@@ -53,6 +58,10 @@ window.geometry('500x400')
 # create label to display image
 image_label = tkinter.Label(window)
 image_label.pack()
+
+# create coordinate text to display longitude and latitude
+coordinate_text = tkinter.Label(window, font=("Arial", 14))
+coordinate_text.pack()
 
 # create countdown text to indicate next update
 time_text = tkinter.Label(window, font=("Arial", 14))
