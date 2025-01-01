@@ -27,7 +27,8 @@ def update_image(window, image_label, image_no):
 
     # update coordinates
     coordinate_string = f'Latitude: {image_coordinates["latitude"]}, Longitude: {image_coordinates["longitude"]}'
-    coordinate_text.config(text=coordinate_string)
+    coordinate_text.delete(1.0, tkinter.END)
+    coordinate_text.insert(tkinter.END, coordinate_string)
 
     # recommended to call API endpoint every minute
     # update image after time
@@ -60,16 +61,16 @@ image_label = tkinter.Label(window)
 image_label.pack()
 
 # create coordinate text to display longitude and latitude
-coordinate_text = tkinter.Label(window, font=("Arial", 14))
+coordinate_text = tkinter.Text(window, font=("Arial", 14), height=1)
 coordinate_text.pack()
-
-# create countdown text to indicate next update
-time_text = tkinter.Label(window, font=("Arial", 14))
-time_text.pack()
 
 # create button
 button = tkinter.Button(window, text='Next', command=button_clicked)
 button.pack()
+
+# create countdown text to indicate next update
+time_text = tkinter.Label(window, font=("Arial", 14))
+time_text.pack()
 
 # start update cycle
 image_no = 0
