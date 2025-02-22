@@ -1,7 +1,10 @@
 import requests
 from io import BytesIO
 import tkinter
+from tkinter import ttk
 from PIL import Image, ImageTk
+
+import sv_ttk
 
 url = "https://api.data.gov.sg/v1/transport/traffic-images"
 
@@ -56,8 +59,11 @@ window = tkinter.Tk()
 window.title("Live Traffic Image")
 window.geometry('500x400')
 
+# change sv-ttk theme
+sv_ttk.set_theme("dark")
+
 # create label to display image
-image_label = tkinter.Label(window)
+image_label = ttk.Label(window)
 image_label.pack()
 
 # create coordinate text to display longitude and latitude
@@ -65,11 +71,11 @@ coordinate_text = tkinter.Text(window, font=("Arial", 14), height=1)
 coordinate_text.pack()
 
 # create button
-button = tkinter.Button(window, text='Next', command=button_clicked)
+button = ttk.Button(window, text='Next', command=button_clicked)
 button.pack()
 
 # create countdown text to indicate next update
-time_text = tkinter.Label(window, font=("Arial", 14))
+time_text = ttk.Label(window, font=("Arial", 14))
 time_text.pack()
 
 # start update cycle

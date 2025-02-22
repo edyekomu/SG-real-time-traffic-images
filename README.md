@@ -8,5 +8,3 @@ I am yet to add the following functionality:</p>
     <li>Multiple windows</li>
     <li>Information relating to the road</li>
 </ol>
-
-<p>This is a poorly written and unoptimised first project.</p>
