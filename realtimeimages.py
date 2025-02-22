@@ -50,7 +50,14 @@ def update_timer():
     else:
         timer = 60 # reset timer
 
-def button_clicked():
+def prev_button_clicked():
+    global image_no, timer
+    timer = 60
+    image_no -= 1
+
+    update_image(window, image_label)
+
+def next_button_clicked():
     global image_no, timer
     timer = 60
     image_no += 1
@@ -61,7 +68,7 @@ def button_clicked():
 # setting up window
 window = tkinter.Tk()
 window.title("Live Traffic Image")
-window.geometry('500x400')
+window.geometry('700x450')
 
 # change sv-ttk theme
 sv_ttk.set_theme("dark")
@@ -74,13 +81,24 @@ image_label.pack()
 coordinate_text = tkinter.Text(window, font=("Arial", 14), height=1)
 coordinate_text.pack()
 
+# create time text container
+time_text_container = ttk.Frame(window)
+time_text_container.pack(pady=10)
+
 # create countdown text to indicate next update
-time_text = ttk.Label(window, font=("Arial", 14))
+time_text = ttk.Label(time_text_container, font=("Arial", 14))
 time_text.pack()
 
-# create button
-button = ttk.Button(window, text='Next', command=button_clicked)
-button.pack()
+# create button container
+button_container = ttk.Frame(window)
+button_container.pack(pady=10)
+
+# create prev & next buttons
+prev_button = ttk.Button(button_container, text='Prev', command=prev_button_clicked)
+prev_button.pack(side=tkinter.LEFT, padx=5)
+
+next_button = ttk.Button(button_container, text='Next', command=next_button_clicked)
+next_button.pack(side=tkinter.LEFT, padx=5)
 
 # start update cycle
 image_no = 0
