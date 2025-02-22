@@ -16,7 +16,11 @@ def query_api(image_no):
     coordinates = data["items"][0]["cameras"][image_no]["location"] # coordinates stored as dictionary
     return image_url, coordinates # return as tuple
 
-def update_image(window, image_label, image_no):
+def update_image(window, image_label):
+    global image_no, timer
+
+    timer = 60 # sync timer
+
     # fetch URL and extract image data in byte format
     image_url, image_coordinates = query_api(image_no)
     response = requests.get(image_url)
@@ -34,24 +38,24 @@ def update_image(window, image_label, image_no):
 
     # recommended to call API endpoint every minute
     # update image after time
-    window.after(20000, update_image, window, image_label, image_no)
+    window.after(60000, update_image, window, image_label)
 
 def update_timer():
     global timer
     time_text['text'] = 'Next Update: ' + str(timer)
-    if timer == 0:
-        timer = 20
-    else:
+    
+    if timer > 0:
         timer -= 1
-    window.after(1000, update_timer)
+        window.after(1000, update_timer)
+    else:
+        timer = 60 # reset timer
 
 def button_clicked():
-    global image_no
-    global timer
-    timer = 20
+    global image_no, timer
+    timer = 60
     image_no += 1
 
-    update_image(window, image_label, image_no)
+    update_image(window, image_label)
     
 
 # setting up window
@@ -70,18 +74,18 @@ image_label.pack()
 coordinate_text = tkinter.Text(window, font=("Arial", 14), height=1)
 coordinate_text.pack()
 
-# create button
-button = ttk.Button(window, text='Next', command=button_clicked)
-button.pack()
-
 # create countdown text to indicate next update
 time_text = ttk.Label(window, font=("Arial", 14))
 time_text.pack()
 
+# create button
+button = ttk.Button(window, text='Next', command=button_clicked)
+button.pack()
+
 # start update cycle
 image_no = 0
-timer = 20
-update_image(window, image_label, image_no)
+timer = 60
+update_image(window, image_label)
 update_timer()
 
 # run main loop
