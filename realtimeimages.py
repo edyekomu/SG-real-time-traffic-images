@@ -3,7 +3,6 @@ from io import BytesIO
 import tkinter
 from tkinter import ttk
 from PIL import Image, ImageTk
-
 import sv_ttk
 
 url = "https://api.data.gov.sg/v1/transport/traffic-images"
@@ -35,20 +34,21 @@ def update_image(window, image_label, image_no):
 
     # recommended to call API endpoint every minute
     # update image after time
-    window.after(60000, update_image, window, image_label)
+    window.after(20000, update_image, window, image_label, image_no)
 
 def update_timer():
     global timer
     time_text['text'] = 'Next Update: ' + str(timer)
     if timer == 0:
-        timer = 60
-    timer -= 1
+        timer = 20
+    else:
+        timer -= 1
     window.after(1000, update_timer)
 
 def button_clicked():
     global image_no
     global timer
-    timer = 60
+    timer = 20
     image_no += 1
 
     update_image(window, image_label, image_no)
@@ -80,7 +80,7 @@ time_text.pack()
 
 # start update cycle
 image_no = 0
-timer = 60
+timer = 20
 update_image(window, image_label, image_no)
 update_timer()
 
